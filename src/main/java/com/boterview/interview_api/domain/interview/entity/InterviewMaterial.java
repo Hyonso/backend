@@ -11,6 +11,6 @@ public class InterviewMaterial {
     private String materialId;
     private String interviewId;
     private MaterialType materialType;
-    private String s3Uri;
+    private String filePath;
     private LocalDateTime createdAt;
 }

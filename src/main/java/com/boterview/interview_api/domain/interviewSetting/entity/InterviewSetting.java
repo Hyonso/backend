@@ -15,10 +15,10 @@ public class InterviewSetting {
     private String settingId;
     private String userId;
     private Integer questionCount;
-    private InterviewerTone interviewerTone;
+    private InterviewerStyle interviewerStyle;
     private InterviewerGender interviewerGender;
     private InterviewerAppearance interviewerAppearance;
     private LocalDateTime createdAt;
-    private String resumeS3Path;
-    private JobType jobType;
+    private String resumeUri;
+    private String position;
 }

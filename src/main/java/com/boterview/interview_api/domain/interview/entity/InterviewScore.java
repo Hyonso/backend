@@ -10,5 +10,5 @@ public class InterviewScore {
     private String interviewId;
     private ScoreType scoreType;
     private Integer score;
-    private String aiReview;
+    private String evaludation;
 }

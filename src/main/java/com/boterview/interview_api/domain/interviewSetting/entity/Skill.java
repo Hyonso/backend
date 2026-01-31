@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Skill {
     private Long skillId;
-    private String skillName;
+    private String skill;
 }

@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 public class InterviewQuestion {
     private Long questionId;
     private String interviewId;
-    private String aiQuestion;
-    private String userAnswer;
+    private String question;
+    private String answer;
     private LocalDateTime createdAt;
-    private Long answerTime;
+    private Long elapsedTime;
 }
