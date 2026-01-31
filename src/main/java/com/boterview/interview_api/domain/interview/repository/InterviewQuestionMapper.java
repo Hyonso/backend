@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface InterviewQuestionMapper {
 
 
-    @Insert("INSERT INTO interview_question (interview_id, ai_question, user_answer, created_at, answer_time) " +
-            "VALUES (#{interviewId}, #{aiQuestion}, #{userAnswer}, #{createdAt}, #{answerTime})")
+    @Insert("INSERT INTO interview_question (interview_id, question, answer, created_at, elapsed_time) " +
+            "VALUES (#{interviewId}, #{question}, #{answer}, #{createdAt}, #{elapsedTime})")
     @Options(useGeneratedKeys = true, keyProperty = "questionId")
     void insert(InterviewQuestion question);
 

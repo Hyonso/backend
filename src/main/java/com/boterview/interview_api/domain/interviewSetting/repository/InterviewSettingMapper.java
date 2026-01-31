@@ -10,10 +10,10 @@ import java.util.Optional;
 public interface InterviewSettingMapper {
 
 
-    @Insert("INSERT INTO interview_setting (setting_id, user_id, question_count, interviewer_tone, " +
-            "interviewer_gender, interviewer_appearance, created_at, resume_s3_path, job_type) " +
-            "VALUES (#{settingId}, #{userId}, #{questionCount}, #{interviewerTone}, " +
-            "#{interviewerGender}, #{interviewerAppearance}, #{createdAt}, #{resumeS3Path}, #{jobType})")
+    @Insert("INSERT INTO interview_setting (setting_id, user_id, question_count, interviewer_style, " +
+            "interviewer_gender, interviewer_appearance, created_at, resume_uri, position) " +
+            "VALUES (#{settingId}, #{userId}, #{questionCount}, #{interviewerStyle}, " +
+            "#{interviewerGender}, #{interviewerAppearance}, #{createdAt}, #{resumeUri}, #{position})")
     void insert(InterviewSetting setting);
 
 }

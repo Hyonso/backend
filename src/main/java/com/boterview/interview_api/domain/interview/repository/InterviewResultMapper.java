@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface InterviewResultMapper {
 
 
-    @Insert("INSERT INTO interview_score (score_id, interview_id, score_type, score, ai_review) " +
-            "VALUES (#{scoreId}, #{interviewId}, #{scoreType}, #{score}, #{aiReview})")
+    @Insert("INSERT INTO interview_score (score_id, interview_id, score_type, score, evaludation) " +
+            "VALUES (#{scoreId}, #{interviewId}, #{scoreType}, #{score}, #{evaludation})")
     void insert(InterviewScore interviewScore);
 
 }

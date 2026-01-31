@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface SkillMapper {
 
 
-    @Insert("INSERT INTO skill (skill_name) VALUES (#{skillName})")
+    @Insert("INSERT INTO skill (skill) VALUES (#{skill})")
     @Options(useGeneratedKeys = true, keyProperty = "skillId")
     void insert(Skill skill);
 
