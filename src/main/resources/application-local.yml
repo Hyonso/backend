@@ -15,6 +15,10 @@ spring:
             client-id: ${KAKAO_CLIENT_ID:your-kakao-client-id}
             client-secret: ${KAKAO_CLIENT_SECRET:your-kakao-client-secret}
 
+ai:
+  server:
+    uri: "http://localhost:8000"
+
 logging:
   level:
     root: INFO
