@@ -28,7 +28,7 @@ public class StompController {
 	private final RestClient restClient = RestClient.create();
 	private final SimpMessagingTemplate messagingTemplate;
 
-	@Value("ai:server:uri")
+	@Value("${ai.server.uri}")
 	private String aiServerUri;
 
 	@MessageMapping("/signal/join")
@@ -37,6 +37,7 @@ public class StompController {
 		String roomId = envelope.getRoomId();
 
 		Room room = roomRegistry.getOrCreateRoom(roomId);
+		roomRegistry.registerSession(sessionId, roomId);
 		SessionInfo sessionInfo = room.addParticipant(sessionId);
 
 		if(sessionInfo.getRole().equals(RoomRole.Caller)){
