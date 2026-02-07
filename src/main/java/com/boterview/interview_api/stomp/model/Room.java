@@ -21,4 +21,12 @@ public class Room {
 		sessionInfoMap.put(sessionId, info);
 		return info;
 	}
+
+	public void removeParticipant(String sessionId){
+		sessionInfoMap.remove(sessionId);
+	}
+
+	public boolean isEmpty(){
+		return sessionInfoMap.isEmpty();
+	}
 }
