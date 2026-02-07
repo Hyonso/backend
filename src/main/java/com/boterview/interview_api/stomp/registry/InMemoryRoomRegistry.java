@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.boterview.interview_api.stomp.model.Room;
 
 @Component
-@Profile("local")
 public class InMemoryRoomRegistry implements RoomRegistry {
 
 	private final ConcurrentHashMap<String, Room> rooms = new ConcurrentHashMap<>();
