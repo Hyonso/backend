@@ -84,8 +84,8 @@ class InterviewSettingControllerTest {
                 "resume", "resume.pdf", "application/pdf", "fake-pdf".getBytes());
 
         mockMvc.perform(multipart("/api/interview-settings")
-                        .file(data)
-                        .file(resume))
+                .file(data)
+                .file(resume))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -101,7 +101,7 @@ class InterviewSettingControllerTest {
                 "data", "", "application/json", createRequestJson().getBytes());
 
         mockMvc.perform(multipart("/api/interview-settings")
-                        .file(data))
+                .file(data))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -117,7 +117,7 @@ class InterviewSettingControllerTest {
                 "data", "", "application/json", createRequestJson().getBytes());
 
         mockMvc.perform(multipart("/api/interview-settings")
-                        .file(data))
+                .file(data))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
