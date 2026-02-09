@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,7 +26,13 @@ import lombok.RequiredArgsConstructor;
 public class StompController {
 
 	private final RoomRegistry roomRegistry;
-	private final RestClient restClient = RestClient.create();
+	private final RestClient restClient = createRestClient();
+
+	private static RestClient createRestClient() {
+		return RestClient.builder()
+			.requestFactory(new HttpComponentsClientHttpRequestFactory())
+			.build();
+	}
 	private final SimpMessagingTemplate messagingTemplate;
 
 	@Value("${ai.server.uri}")
