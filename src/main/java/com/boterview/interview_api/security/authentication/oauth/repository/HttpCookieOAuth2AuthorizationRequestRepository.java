@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class HttpCookieOAuth2AuthorizationRequestRepository
-	implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
+		implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
 	private static final String OAUTH2_AUTH_REQUEST_COOKIE_NAME = "oauth2_auth_request";
 	private static final int COOKIE_EXPIRE_SECONDS = 180;
@@ -31,8 +31,8 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
 
 	@Override
 	public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest,
-		HttpServletRequest request,
-		HttpServletResponse response) {
+			HttpServletRequest request,
+			HttpServletResponse response) {
 		if (authorizationRequest == null) {
 			removeCookie(response);
 			return;
@@ -44,18 +44,18 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
 		}
 
 		ResponseCookie cookie = ResponseCookie.from(OAUTH2_AUTH_REQUEST_COOKIE_NAME, serialized)
-			.path("/")
-			.httpOnly(true)
-			.secure(true)
-			.sameSite("Lax")
-			.maxAge(COOKIE_EXPIRE_SECONDS)
-			.build();
+				.path("/")
+				.httpOnly(true)
+				.secure(true)
+				.sameSite("Lax")
+				.maxAge(COOKIE_EXPIRE_SECONDS)
+				.build();
 		response.addHeader("Set-Cookie", cookie.toString());
 	}
 
 	@Override
 	public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request,
-		HttpServletResponse response) {
+			HttpServletResponse response) {
 		OAuth2AuthorizationRequest authorizationRequest = loadAuthorizationRequest(request);
 		removeCookie(response);
 		return authorizationRequest;
@@ -63,12 +63,12 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
 
 	private void removeCookie(HttpServletResponse response) {
 		ResponseCookie cookie = ResponseCookie.from(OAUTH2_AUTH_REQUEST_COOKIE_NAME, "")
-			.path("/")
-			.httpOnly(true)
-			.secure(true)
-			.sameSite("Lax")
-			.maxAge(0)
-			.build();
+				.path("/")
+				.httpOnly(true)
+				.secure(true)
+				.sameSite("Lax")
+				.maxAge(0)
+				.build();
 		response.addHeader("Set-Cookie", cookie.toString());
 	}
 
@@ -88,7 +88,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
 
 	private String serialize(OAuth2AuthorizationRequest request) {
 		try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			 ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+				ObjectOutputStream oos = new ObjectOutputStream(bos)) {
 			oos.writeObject(request);
 			oos.flush();
 			return Base64.getUrlEncoder().encodeToString(bos.toByteArray());
@@ -102,7 +102,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
 		try {
 			byte[] decoded = Base64.getUrlDecoder().decode(value);
 			try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(decoded))) {
-				return (OAuth2AuthorizationRequest)ois.readObject();
+				return (OAuth2AuthorizationRequest) ois.readObject();
 			}
 		} catch (Exception e) {
 			log.error("Failed to deserialize OAuth2AuthorizationRequest", e);

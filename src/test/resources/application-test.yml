@@ -18,6 +18,11 @@ spring:
     console:
       enabled: true
 
+  # Redis 비활성화 (테스트에서는 불필요)
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
@@ -35,11 +40,17 @@ jwt:
     expiration-ms: 604800000
   max-active: 1
 
-# Redis 비활성화 (테스트에서는 불필요)
-spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
-
 # 로깅
 logging:
   level:
     com.boterview.interview_api: DEBUG
     org.mybatis: DEBUG
+
+# 초기화 설정
+init:
+  admin:
+    email: test-admin@example.com
+    password: test-admin-password-123
+  user:
+    email: test-user@example.com
+    password: test-user-password-123

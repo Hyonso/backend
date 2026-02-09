@@ -3,9 +3,11 @@ package com.boterview.interview_api.security.core.dto;
 import com.boterview.interview_api.domain.user.entity.OAuthProvider;
 import com.boterview.interview_api.domain.user.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class SecurityUserDto {
     private String userId;
@@ -18,7 +20,6 @@ public class SecurityUserDto {
                 user.getUserId(),
                 user.getEmail(),
                 user.getName(),
-                user.getOauth()
-        );
+                user.getOauth());
     }
 }

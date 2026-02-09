@@ -12,46 +12,60 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BaseException.class)
-    protected ResponseEntity<ErrorResponse> handleBaseException(BaseException e) {
-        log.error("BaseException: {}", e.getMessage());
-        ErrorCode errorCode = e.getErrorCode();
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-        return ResponseEntity
-                .status(errorCode.getHttpStatus())
-                .body(errorResponse);
-    }
+        @ExceptionHandler(BaseException.class)
+        protected ResponseEntity<ErrorResponse> handleBaseException(BaseException e) {
+                log.error("BaseException: {}", e.getMessage());
+                ErrorCode errorCode = e.getErrorCode();
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("MethodArgumentNotValidException: {}", e.getMessage());
-        String message = e.getBindingResult().getFieldErrors().stream()
-                .findFirst()
-                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-                .orElse(ErrorCode.INVALID_INPUT.getMessage());
-        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT.getCode(), message);
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(errorResponse);
-    }
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+                        MethodArgumentNotValidException e) {
+                log.error("MethodArgumentNotValidException: {}", e.getMessage());
+                String message = e.getBindingResult().getFieldErrors().stream()
+                                .findFirst()
+                                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                                .orElse(ErrorCode.INVALID_INPUT.getMessage());
+                ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT.getCode(), message);
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(errorResponse);
+        }
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        log.error("HttpRequestMethodNotSupportedException: {}", e.getMessage());
-        ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-        return ResponseEntity
-                .status(errorCode.getHttpStatus())
-                .body(errorResponse);
-    }
+        @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+        protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
+                        HttpRequestMethodNotSupportedException e) {
+                log.error("HttpRequestMethodNotSupportedException: {}", e.getMessage());
+                ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
 
-    @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-        log.error("Unhandled Exception: ", e);
-        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
-        return ResponseEntity
-                .status(errorCode.getHttpStatus())
-                .body(errorResponse);
-    }
+        @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+        protected ResponseEntity<ErrorResponse> handleNoResourceFoundException(
+                        org.springframework.web.servlet.resource.NoResourceFoundException e) {
+                log.error("NoResourceFoundException: {}", e.getMessage());
+                ErrorCode errorCode = ErrorCode.RESOURCE_NOT_FOUND;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
+
+        @ExceptionHandler(Exception.class)
+        protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+                e.printStackTrace(); // For debugging
+                log.error("Unhandled Exception: ", e);
+                ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
 }

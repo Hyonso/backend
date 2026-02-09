@@ -53,6 +53,7 @@ public class BotOAuth2UserService extends DefaultOAuth2UserService {
         User user = User.builder()
                 .userId(UUID.randomUUID().toString())
                 .email(oAuth2UserInfo.getEmail())
+                .password(UUID.randomUUID().toString()) // DB 제약조건(NOT NULL) 준수를 위한 임의 비밀번호
                 .name(oAuth2UserInfo.getName())
                 .oauth(provider)
                 .createdAt(LocalDateTime.now())
