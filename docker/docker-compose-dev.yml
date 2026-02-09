@@ -17,6 +17,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - boterview-net
 
   redis:
     image: redis:7-alpine
@@ -30,8 +32,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - boterview-net
 
-  app:
+  spring:
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -53,7 +57,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      - boterview-net
 
 volumes:
   mysql-data:
   redis-data:
+
+networks:
+  boterview-net:
+    name: boterview_default
