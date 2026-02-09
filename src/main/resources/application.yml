@@ -32,6 +32,15 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET}
+      region: ${S3_REGION:ap-northeast-2}
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
