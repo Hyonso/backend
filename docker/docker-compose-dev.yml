@@ -35,7 +35,7 @@ services:
     networks:
       - boterview-net
 
-  app:
+  spring:
     build:
       context: ..
       dockerfile: docker/Dockerfile
