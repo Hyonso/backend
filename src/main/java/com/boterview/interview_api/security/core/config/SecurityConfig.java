@@ -28,7 +28,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@Profile("!dev & !local")
+@Profile({"dev", "prod"})
 public class SecurityConfig {
 
         @Bean
