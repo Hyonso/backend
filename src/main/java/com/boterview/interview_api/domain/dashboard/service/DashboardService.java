@@ -86,6 +86,17 @@ public class DashboardService {
         return detail;
     }
 
+    public void updateInterviewName(String interviewId, String userId, String name) {
+        String ownerId = dashboardMapper.findUserIdByInterviewId(interviewId)
+                .orElseThrow(() -> new BaseException(ErrorCode.RESOURCE_NOT_FOUND));
+
+        if (!ownerId.equals(userId)) {
+            throw new BaseException(ErrorCode.RESOURCE_NOT_FOUND);
+        }
+
+        dashboardMapper.updateInterviewName(interviewId, name);
+    }
+
     public DashboardMaterialResponseDto getMaterials(String interviewId, String userId) {
         String ownerId = dashboardMapper.findUserIdByInterviewId(interviewId)
                 .orElseThrow(() -> new BaseException(ErrorCode.RESOURCE_NOT_FOUND));

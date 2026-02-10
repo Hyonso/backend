@@ -1,6 +1,7 @@
 package com.boterview.interview_api.domain.dashboard.controller;
 
 import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewDetailResponseDto;
+import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewUpdateRequestDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardMaterialResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardSettingResponseDto;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +39,16 @@ public class DashboardController {
             @AuthenticationPrincipal BotUserDetails userDetails) {
         String userId = userDetails.getUserDto().getUserId();
         return ResponseEntity.ok(dashboardService.getInterviewDetail(interviewId, userId));
+    }
+
+    @PutMapping("/{interviewId}")
+    public ResponseEntity<Void> updateInterviewName(
+            @PathVariable String interviewId,
+            @RequestBody DashboardInterviewUpdateRequestDto request,
+            @AuthenticationPrincipal BotUserDetails userDetails) {
+        String userId = userDetails.getUserDto().getUserId();
+        dashboardService.updateInterviewName(interviewId, userId, request.getName());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/materials/{interviewId}")

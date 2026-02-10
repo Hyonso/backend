@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewDetailResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardMaterialResponseDto;
@@ -149,4 +150,7 @@ public interface DashboardMapper {
             @Result(column = "created_at", property = "createdAt")
     })
     List<DashboardMaterialResponseDto.MaterialDto> findMaterialsByInterviewId(@Param("interviewId") String interviewId);
+
+    @Update("UPDATE interview SET interview_name = #{name} WHERE interview_id = #{interviewId}")
+    void updateInterviewName(@Param("interviewId") String interviewId, @Param("name") String name);
 }
