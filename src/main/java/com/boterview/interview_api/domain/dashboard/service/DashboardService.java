@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.boterview.interview_api.common.exception.BaseException;
 import com.boterview.interview_api.common.exception.ErrorCode;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewDetailResponseDto;
+import com.boterview.interview_api.domain.dashboard.dto.DashboardMaterialResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardSettingResponseDto;
 import com.boterview.interview_api.domain.dashboard.repository.DashboardMapper;
@@ -83,6 +84,26 @@ public class DashboardService {
                 .build());
 
         return detail;
+    }
+
+    public DashboardMaterialResponseDto getMaterials(String interviewId, String userId) {
+        String ownerId = dashboardMapper.findUserIdByInterviewId(interviewId)
+                .orElseThrow(() -> new BaseException(ErrorCode.RESOURCE_NOT_FOUND));
+
+        if (!ownerId.equals(userId)) {
+            throw new BaseException(ErrorCode.RESOURCE_NOT_FOUND);
+        }
+
+        List<DashboardMaterialResponseDto.MaterialDto> items =
+                dashboardMapper.findMaterialsByInterviewId(interviewId);
+
+        return DashboardMaterialResponseDto.builder()
+                .interviewId(interviewId)
+                .items(items)
+                .counts(DashboardMaterialResponseDto.CountsDto.builder()
+                        .materialCount(items.size())
+                        .build())
+                .build();
     }
 
     public DashboardSettingResponseDto getSettingDetail(String settingId, String userId) {

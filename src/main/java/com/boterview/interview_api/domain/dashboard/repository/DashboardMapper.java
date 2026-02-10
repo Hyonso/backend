@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewDetailResponseDto;
+import com.boterview.interview_api.domain.dashboard.dto.DashboardMaterialResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardSettingResponseDto;
 
@@ -137,4 +138,15 @@ public interface DashboardMapper {
             @Result(column = "ai_evaluation", property = "aiEvaluation")
     })
     List<DashboardInterviewDetailResponseDto.ScoreDto> findInterviewScoresByInterviewId(@Param("interviewId") String interviewId);
+
+    @Select("SELECT material_id, material_type, file_path, created_at " +
+            "FROM interview_material " +
+            "WHERE interview_id = #{interviewId}")
+    @Results({
+            @Result(column = "material_id", property = "materialId"),
+            @Result(column = "material_type", property = "type"),
+            @Result(column = "file_path", property = "s3Uri"),
+            @Result(column = "created_at", property = "createdAt")
+    })
+    List<DashboardMaterialResponseDto.MaterialDto> findMaterialsByInterviewId(@Param("interviewId") String interviewId);
 }
