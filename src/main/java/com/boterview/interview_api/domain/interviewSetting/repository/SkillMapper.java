@@ -9,9 +9,7 @@ import java.util.Optional;
 @Mapper
 public interface SkillMapper {
 
-
-    @Insert("INSERT INTO skill (skill) VALUES (#{skill})")
-    @Options(useGeneratedKeys = true, keyProperty = "skillId")
+    @Insert("INSERT IGNORE INTO skill (skill_id, skill) VALUES (#{skillId}, #{skill})")
     void insert(Skill skill);
 
 }
