@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SettingSkill {
     private String settingId;
-    private Long skillId;
+    private String skillId;
 }

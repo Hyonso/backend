@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class InterviewQuestion {
-    private Long questionId;
+    private String questionId;
     private String interviewId;
     private String question;
     private String answer;

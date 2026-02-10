@@ -26,7 +26,7 @@ public class InterviewResultResponseDto {
     @Builder
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class QuestionDto {
-        private Long questionId;
+        private String questionId;
         private String question;
         private String answer;
         private Long intervalTime;

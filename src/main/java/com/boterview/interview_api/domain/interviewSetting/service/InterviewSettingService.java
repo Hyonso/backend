@@ -54,11 +54,12 @@ public class InterviewSettingService {
 		interviewSettingMapper.insert(setting);
 
 		for (String skillName : dto.getSkills()) {
-			Skill skill = Skill.builder().skill(skillName).build();
+			String skillId = UUID.randomUUID().toString();
+			Skill skill = Skill.builder().skillId(skillId).skill(skillName).build();
 			skillMapper.insert(skill);
 			settingSkillMapper.insert(SettingSkill.builder()
 					.settingId(settingId)
-					.skillId(skill.getSkillId())
+					.skillId(skillId)
 					.build());
 		}
 
