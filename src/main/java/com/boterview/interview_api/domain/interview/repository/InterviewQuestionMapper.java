@@ -15,4 +15,8 @@ public interface InterviewQuestionMapper {
     @Options(useGeneratedKeys = true, keyProperty = "questionId")
     void insert(InterviewQuestion question);
 
+    @Select("SELECT question_id, interview_id, question, answer, created_at, elapsed_time " +
+            "FROM interview_question WHERE interview_id = #{interviewId}")
+    List<InterviewQuestion> findByInterviewId(@Param("interviewId") String interviewId);
+
 }

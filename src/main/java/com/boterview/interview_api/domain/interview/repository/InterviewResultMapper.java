@@ -14,4 +14,8 @@ public interface InterviewResultMapper {
             "VALUES (#{scoreId}, #{interviewId}, #{scoreType}, #{score}, #{evaludation})")
     void insert(InterviewScore interviewScore);
 
+    @Select("SELECT score_id, interview_id, score_type, score, evaludation " +
+            "FROM interview_score WHERE interview_id = #{interviewId}")
+    List<InterviewScore> findByInterviewId(@Param("interviewId") String interviewId);
+
 }
