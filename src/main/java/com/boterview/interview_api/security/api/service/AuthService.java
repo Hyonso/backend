@@ -1,5 +1,6 @@
 package com.boterview.interview_api.security.api.service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +16,8 @@ import com.boterview.interview_api.security.core.exception.InValidAccessTokenExc
 import com.boterview.interview_api.security.authentication.jwt.provider.JwtTokenProvider;
 import com.boterview.interview_api.security.authentication.jwt.registry.JwtRegistry;
 import com.boterview.interview_api.security.core.principal.BotUserDetails;
-
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.boterview.interview_api.security.authentication.jwt.exception.InValidRefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,10 +32,55 @@ public class AuthService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    public JwtInformation login(String email, String password) {
+        // 1. 사용자 조회
+        BotUserDetails userDetails;
+        try {
+            userDetails = (BotUserDetails) userDetailsService.loadUserByUsername(email);
+            log.info("LOGIN DEBUG - User found: {}", userDetails.getUsername());
+            log.info("LOGIN DEBUG - DB Password: '{}'", userDetails.getPassword());
+            log.info("LOGIN DEBUG - Input Password: '{}'", password);
+        } catch (UsernameNotFoundException e) {
+            log.error("LOGIN DEBUG - User not found: {}", email);
+            throw new BaseException(ErrorCode.INVALID_CREDENTIAL);
+        }
+
+        // 2. 비밀번호 검증
+        boolean matches = passwordEncoder.matches(password, userDetails.getPassword());
+        log.info("LOGIN DEBUG - Password Matches: {}", matches);
+
+        if (userDetails.getPassword() == null || !matches) {
+            throw new BaseException(ErrorCode.INVALID_CREDENTIAL);
+        }
+
+        // 3. JWT 토큰 생성
+        String accessToken = tokenProvider.generateAccessToken(userDetails);
+        String refreshToken = tokenProvider.generateRefreshToken(userDetails);
+
+        // 4. JWT 정보 생성 및 등록
+        JwtInformation jwtInfo = new JwtInformation(
+                userDetails.getUserDto(),
+                accessToken,
+                refreshToken);
+
+        jwtRegistry.registerJwtInformation(jwtInfo);
+        return jwtInfo;
+    }
+
+    public void logout(String refreshToken) {
+        if (refreshToken != null && tokenProvider.validateRefreshToken(refreshToken)) {
+            String email = tokenProvider.getSubject(refreshToken);
+            User user = userMapper.findByEmail(email).orElse(null);
+            if (user != null) {
+                jwtRegistry.invalidateJwtInformationByUserId(user.getUserId());
+            }
+        }
+    }
+
     public JwtInformation refreshToken(String refreshToken) {
         if (!tokenProvider.validateRefreshToken(refreshToken)
                 || !jwtRegistry.hasActiveJwtInformationByRefreshToken(refreshToken)) {
-            throw new InValidAccessTokenException();
+            throw new InValidRefreshTokenException("Invalid refresh token");
         }
 
         String email = tokenProvider.getSubject(refreshToken);
@@ -45,14 +92,13 @@ public class AuthService {
         JwtInformation newInfo = new JwtInformation(
                 userDetails.getUserDto(),
                 newAccessToken,
-                newRefreshToken
-        );
+                newRefreshToken);
 
         jwtRegistry.rotateJwtInformation(refreshToken, newInfo);
         return newInfo;
     }
 
-    public void signup(String email, String password, String name) {
+    public String signup(String email, String password, String name) {
         if (userMapper.findByEmail(email).isPresent()) {
             throw new BaseException(ErrorCode.USER_ALREADY_EXISTS);
         }
@@ -62,9 +108,11 @@ public class AuthService {
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .name(name)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         userMapper.insert(user);
+        return user.getUserId();
     }
 
     public void resetPassword(String email) {

@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: interview-api-test
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      encoding: UTF-8
+
+  h2:
+    console:
+      enabled: true
+
+  # Redis 비활성화 (테스트에서는 불필요)
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+  type-aliases-package: com.boterview.interview_api.domain
+
+# JWT 설정 (테스트용)
+jwt:
+  access-token:
+    secret: test-access-secret-key-must-be-at-least-32-characters-long-for-testing
+    expiration-ms: 1800000
+  refresh-token:
+    secret: test-refresh-secret-key-must-be-at-least-32-characters-long-for-testing
+    expiration-ms: 604800000
+  max-active: 1
+
+# 로깅
+logging:
+  level:
+    com.boterview.interview_api: DEBUG
+    org.mybatis: DEBUG
+
+# 초기화 설정
+init:
+  admin:
+    email: test-admin@example.com
+    password: test-admin-password-123
+  user:
+    email: test-user@example.com
+    password: test-user-password-123
