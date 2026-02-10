@@ -17,7 +17,7 @@ import com.boterview.interview_api.security.authentication.jwt.provider.JwtToken
 import com.boterview.interview_api.security.authentication.jwt.registry.JwtRegistry;
 import com.boterview.interview_api.security.core.principal.BotUserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
+import com.boterview.interview_api.security.authentication.jwt.exception.InValidRefreshTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,7 +80,7 @@ public class AuthService {
     public JwtInformation refreshToken(String refreshToken) {
         if (!tokenProvider.validateRefreshToken(refreshToken)
                 || !jwtRegistry.hasActiveJwtInformationByRefreshToken(refreshToken)) {
-            throw new InValidAccessTokenException();
+            throw new InValidRefreshTokenException("Invalid refresh token");
         }
 
         String email = tokenProvider.getSubject(refreshToken);

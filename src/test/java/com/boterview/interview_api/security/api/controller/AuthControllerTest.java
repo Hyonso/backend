@@ -102,6 +102,19 @@ class AuthControllerTest {
         }
 
         @Test
+        @DisplayName("POST /api/auth/refresh - 실패 (유효하지 않은 토큰)")
+        void refresh_Failure_InvalidToken() throws Exception {
+                // Given
+                String invalidToken = "invalid-refresh-token";
+
+                // When & Then
+                mockMvc.perform(post("/api/auth/refresh")
+                                .cookie(new jakarta.servlet.http.Cookie("refreshToken", invalidToken)))
+                                .andExpect(status().isUnauthorized())
+                                .andExpect(jsonPath("$.code").value("A002"));
+        }
+
+        @Test
         @DisplayName("POST /api/auth/logout - 성공")
         void logout_Success() throws Exception {
                 // Given - 사용자 생성 후 로그인

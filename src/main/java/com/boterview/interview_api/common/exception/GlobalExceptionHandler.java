@@ -58,6 +58,61 @@ public class GlobalExceptionHandler {
                                 .body(errorResponse);
         }
 
+        @ExceptionHandler(com.boterview.interview_api.security.authentication.jwt.exception.InValidAccessTokenException.class)
+        protected ResponseEntity<ErrorResponse> handleInValidAccessTokenException(
+                        com.boterview.interview_api.security.authentication.jwt.exception.InValidAccessTokenException e) {
+                log.error("InValidAccessTokenException: {}", e.getMessage());
+                ErrorCode errorCode = ErrorCode.INVALID_ACCESS_TOKEN;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
+
+        @ExceptionHandler(com.boterview.interview_api.security.authentication.jwt.exception.InValidRefreshTokenException.class)
+        protected ResponseEntity<ErrorResponse> handleInValidRefreshTokenException(
+                        com.boterview.interview_api.security.authentication.jwt.exception.InValidRefreshTokenException e) {
+                log.error("InValidRefreshTokenException: {}", e.getMessage());
+                ErrorCode errorCode = ErrorCode.INVALID_REFRESH_TOKEN;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
+
+        @ExceptionHandler(com.boterview.interview_api.security.core.exception.TokenGenerateException.class)
+        protected ResponseEntity<ErrorResponse> handleTokenGenerateException(
+                        com.boterview.interview_api.security.core.exception.TokenGenerateException e) {
+                log.error("TokenGenerateException: {}", e.getMessage());
+                ErrorCode errorCode = ErrorCode.TOKEN_GENERATE_FAIL;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
+
+        @ExceptionHandler(com.boterview.interview_api.security.core.exception.UnexpectedPrincipalException.class)
+        protected ResponseEntity<ErrorResponse> handleUnexpectedPrincipalException(
+                        com.boterview.interview_api.security.core.exception.UnexpectedPrincipalException e) {
+                log.error("UnexpectedPrincipalException: {}", e.getMessage());
+                ErrorCode errorCode = ErrorCode.UNEXPECTED_PRINCIPAL;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
+
+        @ExceptionHandler(com.boterview.interview_api.security.authentication.oauth.exception.UnSupportedOAuthException.class)
+        protected ResponseEntity<ErrorResponse> handleUnSupportedOAuthException(
+                        com.boterview.interview_api.security.authentication.oauth.exception.UnSupportedOAuthException e) {
+                log.error("UnSupportedOAuthException: {}", e.getMessage());
+                ErrorCode errorCode = ErrorCode.UNSUPPORTED_OAUTH;
+                ErrorResponse errorResponse = ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
+                return ResponseEntity
+                                .status(errorCode.getHttpStatus())
+                                .body(errorResponse);
+        }
+
         @ExceptionHandler(Exception.class)
         protected ResponseEntity<ErrorResponse> handleException(Exception e) {
                 e.printStackTrace(); // For debugging

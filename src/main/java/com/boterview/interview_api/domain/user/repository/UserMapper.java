@@ -22,4 +22,10 @@ public interface UserMapper {
 
         @Update("UPDATE `user` SET password = #{password} WHERE user_id = #{userId}")
         void updatePassword(@Param("userId") String userId, @Param("password") String password);
+
+        @Select("SELECT * FROM `user` WHERE user_id = #{userId}")
+        Optional<User> findById(String userId);
+
+        @Delete("DELETE FROM `user` WHERE user_id = #{userId}")
+        void delete(String userId);
 }
