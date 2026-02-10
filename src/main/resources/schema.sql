@@ -79,7 +79,7 @@ CREATE TABLE interview_material (
 CREATE TABLE interview_score (
                                  score_id CHAR(36) NOT NULL,
                                  interview_id CHAR(36) NOT NULL,
-                                 score_type VARCHAR(20) NULL,
+                                 score_type VARCHAR(30) NULL,
                                  score INT NULL,
                                  evaludation TEXT NULL,
                                  PRIMARY KEY (score_id),

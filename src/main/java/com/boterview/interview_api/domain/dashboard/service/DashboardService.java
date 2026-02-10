@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.boterview.interview_api.common.exception.BaseException;
 import com.boterview.interview_api.common.exception.ErrorCode;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardResponseDto;
+import com.boterview.interview_api.domain.dashboard.dto.DashboardSettingResponseDto;
 import com.boterview.interview_api.domain.dashboard.repository.DashboardMapper;
 import com.boterview.interview_api.domain.user.entity.User;
 import com.boterview.interview_api.domain.user.repository.UserMapper;
@@ -55,5 +56,19 @@ public class DashboardService {
                 .status(stats)
                 .recentInterviews(recentInterviews)
                 .build();
+    }
+
+    public DashboardSettingResponseDto getSettingDetail(String settingId, String userId) {
+        DashboardSettingResponseDto setting = dashboardMapper.findSettingById(settingId)
+                .orElseThrow(() -> new BaseException(ErrorCode.RESOURCE_NOT_FOUND));
+
+        if (!setting.getUserId().equals(userId)) {
+            throw new BaseException(ErrorCode.RESOURCE_NOT_FOUND);
+        }
+
+        setting.setSkills(dashboardMapper.findSkillDtosBySettingId(settingId));
+        setting.setPreQuestions(dashboardMapper.findPreQuestionsBySettingId(settingId));
+
+        return setting;
     }
 }
