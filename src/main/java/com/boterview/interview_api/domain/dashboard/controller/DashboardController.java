@@ -1,5 +1,6 @@
 package com.boterview.interview_api.domain.dashboard.controller;
 
+import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewDetailResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardSettingResponseDto;
 import com.boterview.interview_api.domain.dashboard.service.DashboardService;
@@ -26,6 +27,14 @@ public class DashboardController {
             @AuthenticationPrincipal BotUserDetails userDetails) {
         String userId = userDetails.getUserDto().getUserId();
         return ResponseEntity.ok(dashboardService.getDashboard(userId));
+    }
+
+    @GetMapping("/{interviewId}")
+    public ResponseEntity<DashboardInterviewDetailResponseDto> getInterviewDetail(
+            @PathVariable String interviewId,
+            @AuthenticationPrincipal BotUserDetails userDetails) {
+        String userId = userDetails.getUserDto().getUserId();
+        return ResponseEntity.ok(dashboardService.getInterviewDetail(interviewId, userId));
     }
 
     @GetMapping("/setting/{settingId}")

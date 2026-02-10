@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.boterview.interview_api.common.exception.BaseException;
 import com.boterview.interview_api.common.exception.ErrorCode;
+import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewDetailResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardSettingResponseDto;
 import com.boterview.interview_api.domain.dashboard.repository.DashboardMapper;
@@ -56,6 +57,32 @@ public class DashboardService {
                 .status(stats)
                 .recentInterviews(recentInterviews)
                 .build();
+    }
+
+    public DashboardInterviewDetailResponseDto getInterviewDetail(String interviewId, String userId) {
+        String ownerId = dashboardMapper.findUserIdByInterviewId(interviewId)
+                .orElseThrow(() -> new BaseException(ErrorCode.RESOURCE_NOT_FOUND));
+
+        if (!ownerId.equals(userId)) {
+            throw new BaseException(ErrorCode.RESOURCE_NOT_FOUND);
+        }
+
+        DashboardInterviewDetailResponseDto detail = dashboardMapper.findInterviewDetailById(interviewId)
+                .orElseThrow(() -> new BaseException(ErrorCode.RESOURCE_NOT_FOUND));
+
+        List<DashboardInterviewDetailResponseDto.QuestionDto> questions =
+                dashboardMapper.findInterviewQuestionsByInterviewId(interviewId);
+        List<DashboardInterviewDetailResponseDto.ScoreDto> scores =
+                dashboardMapper.findInterviewScoresByInterviewId(interviewId);
+
+        detail.setQuestions(questions);
+        detail.setScores(scores);
+        detail.setCounts(DashboardInterviewDetailResponseDto.CountsDto.builder()
+                .questionCount(questions.size())
+                .scoreCount(scores.size())
+                .build());
+
+        return detail;
     }
 
     public DashboardSettingResponseDto getSettingDetail(String settingId, String userId) {

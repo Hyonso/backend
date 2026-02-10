@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
+import com.boterview.interview_api.domain.dashboard.dto.DashboardInterviewDetailResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardResponseDto;
 import com.boterview.interview_api.domain.dashboard.dto.DashboardSettingResponseDto;
 
@@ -93,4 +94,47 @@ public interface DashboardMapper {
             @Result(column = "answer", property = "answer")
     })
     List<DashboardSettingResponseDto.PreQuestionDto> findPreQuestionsBySettingId(@Param("settingId") String settingId);
+
+    @Select("SELECT i.interview_id, i.setting_id, i.duration AS duration_ms, " +
+            "i.created_at, i.ai_overall_review AS ai_overall_summary " +
+            "FROM interview i " +
+            "WHERE i.interview_id = #{interviewId}")
+    @Results({
+            @Result(column = "interview_id", property = "interviewId"),
+            @Result(column = "setting_id", property = "settingId"),
+            @Result(column = "duration_ms", property = "durationMs"),
+            @Result(column = "created_at", property = "createdAt"),
+            @Result(column = "ai_overall_summary", property = "aiOverallSummary")
+    })
+    Optional<DashboardInterviewDetailResponseDto> findInterviewDetailById(@Param("interviewId") String interviewId);
+
+    @Select("SELECT s.user_id FROM interview i " +
+            "JOIN interview_setting s ON i.setting_id = s.setting_id " +
+            "WHERE i.interview_id = #{interviewId}")
+    Optional<String> findUserIdByInterviewId(@Param("interviewId") String interviewId);
+
+    @Select("SELECT question_id, question AS ai_question, answer AS user_answer, " +
+            "created_at, elapsed_time AS elapsed_ms " +
+            "FROM interview_question " +
+            "WHERE interview_id = #{interviewId} " +
+            "ORDER BY created_at")
+    @Results({
+            @Result(column = "question_id", property = "questionId"),
+            @Result(column = "ai_question", property = "aiQuestion"),
+            @Result(column = "user_answer", property = "userAnswer"),
+            @Result(column = "created_at", property = "createdAt"),
+            @Result(column = "elapsed_ms", property = "elapsedMs")
+    })
+    List<DashboardInterviewDetailResponseDto.QuestionDto> findInterviewQuestionsByInterviewId(@Param("interviewId") String interviewId);
+
+    @Select("SELECT score_id, score_type, score, evaludation AS ai_evaluation " +
+            "FROM interview_score " +
+            "WHERE interview_id = #{interviewId}")
+    @Results({
+            @Result(column = "score_id", property = "scoreId"),
+            @Result(column = "score_type", property = "type"),
+            @Result(column = "score", property = "score"),
+            @Result(column = "ai_evaluation", property = "aiEvaluation")
+    })
+    List<DashboardInterviewDetailResponseDto.ScoreDto> findInterviewScoresByInterviewId(@Param("interviewId") String interviewId);
 }
