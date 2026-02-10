@@ -58,7 +58,13 @@ public class InterviewSettingService {
 		interviewSettingMapper.insert(setting);
 
 		for (String skillName : dto.getSkills()) {
+<<<<<<< HEAD
 			String skillId = resolveSkillId(skillName);
+=======
+			String skillId = UUID.randomUUID().toString();
+			Skill skill = Skill.builder().skillId(skillId).skill(skillName).build();
+			skillMapper.insert(skill);
+>>>>>>> 461bf75 (add: id가 BIGINT 타입으로 되어있는것 수정)
 			settingSkillMapper.insert(SettingSkill.builder()
 					.settingId(settingId)
 					.skillId(skillId)
