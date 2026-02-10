@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Skill {
-    private Long skillId;
+    private String skillId;
     private String skill;
 }

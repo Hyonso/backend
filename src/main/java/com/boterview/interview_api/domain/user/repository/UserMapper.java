@@ -28,4 +28,9 @@ public interface UserMapper {
 
         @Delete("DELETE FROM `user` WHERE user_id = #{userId}")
         void delete(String userId);
+    @Update("UPDATE `user` SET password = #{password} WHERE user_id = #{userId}")
+    void updatePassword(@Param("userId") String userId, @Param("password") String password);
+
+    @Select("SELECT user_id, name FROM `user` WHERE user_id = #{userId}")
+    Optional<User> findById(@Param("userId") String userId);
 }

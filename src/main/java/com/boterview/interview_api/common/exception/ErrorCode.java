@@ -24,6 +24,9 @@ public enum ErrorCode {
     UNSUPPORTED_OAUTH(HttpStatus.BAD_REQUEST, "A007", "지원하지 않는 OAuth 제공자입니다"),
     AUTH_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, "A008", "소셜 로그인 사용자는 비밀번호를 변경할 수 없습니다"),
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "A009", "이미 존재하는 이메일입니다"),
+
+    // File
+    FILE_UPLOAD_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "파일 업로드에 실패했습니다"),
     ;
 
     private final HttpStatus httpStatus;
