@@ -51,7 +51,8 @@ CREATE TABLE interview (
                             ai_overall_review TEXT NULL,
                             interview_name VARCHAR(255) NULL,
                             PRIMARY KEY (interview_id),
-                            FOREIGN KEY (setting_id) REFERENCES interview_setting (setting_id) ON DELETE CASCADE
+                            FOREIGN KEY (setting_id) REFERENCES interview_setting (setting_id) ON DELETE CASCADE,
+                            UNIQUE KEY unique_setting (setting_id)
 );
 
 -- 사전 질문 테이블

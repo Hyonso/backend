@@ -47,50 +47,74 @@ INSERT INTO `user` (user_id, email, password, name, created_at, oauth) VALUES
 (@u3, 'testuser3@boterview.com', 'qwer1234', '박코딩', '2026-01-10 11:00:00', NULL);
 
 -- ================================================
--- 사용자1 - 면접 설정 4개
+-- 사용자1 - 면접 설정 8개 (면접 1:1 매핑)
 -- ================================================
 SET @s1 = UUID();
+SET @s1b = UUID();
 SET @s2 = UUID();
+SET @s2b = UUID();
 SET @s3 = UUID();
+SET @s3b = UUID();
 SET @s4 = UUID();
+SET @s4b = UUID();
 
 INSERT INTO interview_setting (setting_id, user_id, question_count, interviewer_style, interviewer_gender, interviewer_appearance, created_at, resume_uri, position) VALUES
-(@s1, @u1, 5, 'FORMAL',   'MALE',   'REAL',   '2026-01-10 10:00:00', 's3://bucket/resume/s1/resume.pdf', 'BACKEND_DEVELOPER'),
-(@s2, @u1, 3, 'CASUAL',   'FEMALE', 'ANIME',  '2026-01-15 14:00:00', NULL,                               'FRONT_DEVELOPER'),
-(@s3, @u1, 4, 'PRESSURE', 'MALE',   'REAL',   '2026-01-20 09:00:00', 's3://bucket/resume/s3/resume.pdf', 'DEV_OPS_DEVELOPER'),
-(@s4, @u1, 5, 'FORMAL',   'FEMALE', 'ANIMAL', '2026-01-25 16:00:00', 's3://bucket/resume/s4/resume.pdf', 'DBA');
+(@s1,  @u1, 5, 'FORMAL',   'MALE',   'REAL',   '2026-01-10 10:00:00', 's3://bucket/resume/s1/resume.pdf', 'BACKEND_DEVELOPER'),
+(@s1b, @u1, 5, 'FORMAL',   'MALE',   'REAL',   '2026-01-12 10:00:00', 's3://bucket/resume/s1/resume.pdf', 'BACKEND_DEVELOPER'),
+(@s2,  @u1, 3, 'CASUAL',   'FEMALE', 'ANIME',  '2026-01-15 14:00:00', NULL,                               'FRONT_DEVELOPER'),
+(@s2b, @u1, 3, 'CASUAL',   'FEMALE', 'ANIME',  '2026-01-17 14:00:00', NULL,                               'FRONT_DEVELOPER'),
+(@s3,  @u1, 4, 'PRESSURE', 'MALE',   'REAL',   '2026-01-20 09:00:00', 's3://bucket/resume/s3/resume.pdf', 'DEV_OPS_DEVELOPER'),
+(@s3b, @u1, 4, 'PRESSURE', 'MALE',   'REAL',   '2026-01-22 09:00:00', 's3://bucket/resume/s3/resume.pdf', 'DEV_OPS_DEVELOPER'),
+(@s4,  @u1, 5, 'FORMAL',   'FEMALE', 'ANIMAL', '2026-01-25 16:00:00', 's3://bucket/resume/s4/resume.pdf', 'DBA'),
+(@s4b, @u1, 5, 'FORMAL',   'FEMALE', 'ANIMAL', '2026-01-27 16:00:00', 's3://bucket/resume/s4/resume.pdf', 'DBA');
 
--- 사용자2 - 면접 설정 3개
+-- 사용자2 - 면접 설정 5개 (면접 1:1 매핑)
 SET @s5 = UUID();
+SET @s5b = UUID();
 SET @s6 = UUID();
+SET @s6b = UUID();
 SET @s7 = UUID();
 
 INSERT INTO interview_setting (setting_id, user_id, question_count, interviewer_style, interviewer_gender, interviewer_appearance, created_at, resume_uri, position) VALUES
-(@s5, @u2, 5, 'FORMAL',   'MALE',   'REAL',  '2026-01-12 10:00:00', 's3://bucket/resume/s5/resume.pdf', 'BACKEND_DEVELOPER'),
-(@s6, @u2, 4, 'CASUAL',   'FEMALE', 'ANIME', '2026-01-18 11:00:00', NULL,                               'AI_DEVELOPER'),
-(@s7, @u2, 3, 'PRESSURE', 'MALE',   'REAL',  '2026-01-22 15:00:00', 's3://bucket/resume/s7/resume.pdf', 'BACKEND_DEVELOPER');
+(@s5,  @u2, 5, 'FORMAL',   'MALE',   'REAL',  '2026-01-12 10:00:00', 's3://bucket/resume/s5/resume.pdf', 'BACKEND_DEVELOPER'),
+(@s5b, @u2, 5, 'FORMAL',   'MALE',   'REAL',  '2026-01-14 10:00:00', 's3://bucket/resume/s5/resume.pdf', 'BACKEND_DEVELOPER'),
+(@s6,  @u2, 4, 'CASUAL',   'FEMALE', 'ANIME', '2026-01-18 11:00:00', NULL,                               'AI_DEVELOPER'),
+(@s6b, @u2, 4, 'CASUAL',   'FEMALE', 'ANIME', '2026-01-20 11:00:00', NULL,                               'AI_DEVELOPER'),
+(@s7,  @u2, 3, 'PRESSURE', 'MALE',   'REAL',  '2026-01-22 15:00:00', 's3://bucket/resume/s7/resume.pdf', 'BACKEND_DEVELOPER');
 
--- 사용자3 - 면접 설정 2개
+-- 사용자3 - 면접 설정 4개 (면접 1:1 매핑)
 SET @s8 = UUID();
+SET @s8b = UUID();
 SET @s9 = UUID();
+SET @s9b = UUID();
 
 INSERT INTO interview_setting (setting_id, user_id, question_count, interviewer_style, interviewer_gender, interviewer_appearance, created_at, resume_uri, position) VALUES
-(@s8, @u3, 5, 'FORMAL', 'FEMALE', 'REAL',   '2026-01-14 13:00:00', 's3://bucket/resume/s8/resume.pdf', 'FRONT_DEVELOPER'),
-(@s9, @u3, 4, 'CASUAL', 'MALE',   'ANIMAL', '2026-01-20 17:00:00', NULL,                               'BACKEND_DEVELOPER');
+(@s8,  @u3, 5, 'FORMAL', 'FEMALE', 'REAL',   '2026-01-14 13:00:00', 's3://bucket/resume/s8/resume.pdf', 'FRONT_DEVELOPER'),
+(@s8b, @u3, 5, 'FORMAL', 'FEMALE', 'REAL',   '2026-01-16 13:00:00', 's3://bucket/resume/s8/resume.pdf', 'FRONT_DEVELOPER'),
+(@s9,  @u3, 4, 'CASUAL', 'MALE',   'ANIMAL', '2026-01-20 17:00:00', NULL,                               'BACKEND_DEVELOPER'),
+(@s9b, @u3, 4, 'CASUAL', 'MALE',   'ANIMAL', '2026-01-24 17:00:00', NULL,                               'BACKEND_DEVELOPER');
 
 -- ================================================
 -- 설정-스킬 매핑
 -- ================================================
 INSERT INTO setting_skill (setting_id, skill_id) VALUES
 (@s1, @sk1), (@s1, @sk2), (@s1, @sk3),
+(@s1b, @sk1), (@s1b, @sk2), (@s1b, @sk3),
 (@s2, @sk5), (@s2, @sk6),
+(@s2b, @sk5), (@s2b, @sk6),
 (@s3, @sk4), (@s3, @sk7), (@s3, @sk10),
+(@s3b, @sk4), (@s3b, @sk7), (@s3b, @sk10),
 (@s4, @sk3), (@s4, @sk8),
+(@s4b, @sk3), (@s4b, @sk8),
 (@s5, @sk1), (@s5, @sk2), (@s5, @sk8),
+(@s5b, @sk1), (@s5b, @sk2), (@s5b, @sk8),
 (@s6, @sk9), (@s6, @sk10),
+(@s6b, @sk9), (@s6b, @sk10),
 (@s7, @sk1), (@s7, @sk2), (@s7, @sk3), (@s7, @sk4),
 (@s8, @sk5), (@s8, @sk6),
-(@s9, @sk1), (@s9, @sk2);
+(@s8b, @sk5), (@s8b, @sk6),
+(@s9, @sk1), (@s9, @sk2),
+(@s9b, @sk1), (@s9b, @sk2);
 
 -- ================================================
 -- 사전 질문
@@ -113,33 +137,33 @@ SET @i1  = UUID(); SET @i2  = UUID(); SET @i3  = UUID(); SET @i4  = UUID();
 SET @i5  = UUID(); SET @i6  = UUID(); SET @i7  = UUID(); SET @i8  = UUID();
 
 INSERT INTO interview (interview_id, setting_id, duration, created_at, ai_overall_review, interview_name) VALUES
-(@i1, @s1, 780000,  '2026-01-11 10:30:00', '전체적으로 논리 구조는 좋으나 기술 용어의 정확한 사용이 부족합니다.', 'Backend 1차 면접'),
-(@i2, @s1, 920000,  '2026-01-13 14:00:00', 'Spring 핵심 개념에 대한 이해도가 높고 답변이 체계적입니다.', 'Backend 2차 면접'),
-(@i3, @s2, 540000,  '2026-01-16 11:00:00', 'React 기초 지식은 탄탄하나 상태 관리 패턴에 대한 깊이가 부족합니다.', 'Frontend React 면접'),
-(@i4, @s2, 600000,  '2026-01-18 16:00:00', 'TypeScript 타입 시스템에 대한 이해가 우수합니다.', 'Frontend TS 심화 면접'),
-(@i5, @s3, 850000,  '2026-01-21 09:30:00', 'DevOps 전반에 대한 이해는 있으나 실무 경험이 부족해 보입니다.', 'DevOps 기초 면접'),
-(@i6, @s3, 720000,  '2026-01-23 10:00:00', 'Kubernetes 운영 경험에 대한 답변이 구체적이고 좋았습니다.', 'DevOps K8s 심화'),
-(@i7, @s4, 680000,  '2026-01-26 14:30:00', 'SQL 최적화에 대한 이해도는 높으나 실행 계획 분석이 미흡합니다.', 'DBA SQL 최적화 면접'),
-(@i8, @s4, 900000,  '2026-01-28 11:00:00', '인덱스 설계와 파티셔닝에 대한 답변이 탁월했습니다.', 'DBA 인덱스 심화 면접');
+(@i1, @s1,  780000,  '2026-01-11 10:30:00', '전체적으로 논리 구조는 좋으나 기술 용어의 정확한 사용이 부족합니다.', 'Backend 1차 면접'),
+(@i2, @s1b, 920000,  '2026-01-13 14:00:00', 'Spring 핵심 개념에 대한 이해도가 높고 답변이 체계적입니다.', 'Backend 2차 면접'),
+(@i3, @s2,  540000,  '2026-01-16 11:00:00', 'React 기초 지식은 탄탄하나 상태 관리 패턴에 대한 깊이가 부족합니다.', 'Frontend React 면접'),
+(@i4, @s2b, 600000,  '2026-01-18 16:00:00', 'TypeScript 타입 시스템에 대한 이해가 우수합니다.', 'Frontend TS 심화 면접'),
+(@i5, @s3,  850000,  '2026-01-21 09:30:00', 'DevOps 전반에 대한 이해는 있으나 실무 경험이 부족해 보입니다.', 'DevOps 기초 면접'),
+(@i6, @s3b, 720000,  '2026-01-23 10:00:00', 'Kubernetes 운영 경험에 대한 답변이 구체적이고 좋았습니다.', 'DevOps K8s 심화'),
+(@i7, @s4,  680000,  '2026-01-26 14:30:00', 'SQL 최적화에 대한 이해도는 높으나 실행 계획 분석이 미흡합니다.', 'DBA SQL 최적화 면접'),
+(@i8, @s4b, 900000,  '2026-01-28 11:00:00', '인덱스 설계와 파티셔닝에 대한 답변이 탁월했습니다.', 'DBA 인덱스 심화 면접');
 
 -- 사용자2 면접 5건
 SET @i9  = UUID(); SET @i10 = UUID(); SET @i11 = UUID(); SET @i12 = UUID(); SET @i13 = UUID();
 
 INSERT INTO interview (interview_id, setting_id, duration, created_at, ai_overall_review, interview_name) VALUES
-(@i9,  @s5, 810000, '2026-01-13 11:00:00', 'JPA와 QueryDSL 활용 능력이 뛰어납니다.', 'Backend JPA 면접'),
-(@i10, @s5, 750000, '2026-01-15 15:00:00', 'Redis 캐싱 전략에 대한 이해가 실무 수준입니다.', 'Backend Redis 면접'),
-(@i11, @s6, 660000, '2026-01-19 10:00:00', 'ML 파이프라인 설계에 대한 기본기가 갖춰져 있습니다.', 'AI/ML 기초 면접'),
-(@i12, @s6, 720000, '2026-01-21 14:00:00', '모델 서빙과 최적화에 대한 답변이 인상적이었습니다.', 'AI 모델 서빙 면접'),
-(@i13, @s7, 580000, '2026-01-24 09:00:00', 'MSA 아키텍처 경험이 풍부하고 트러블슈팅 능력이 좋습니다.', 'Backend MSA 면접');
+(@i9,  @s5,  810000, '2026-01-13 11:00:00', 'JPA와 QueryDSL 활용 능력이 뛰어납니다.', 'Backend JPA 면접'),
+(@i10, @s5b, 750000, '2026-01-15 15:00:00', 'Redis 캐싱 전략에 대한 이해가 실무 수준입니다.', 'Backend Redis 면접'),
+(@i11, @s6,  660000, '2026-01-19 10:00:00', 'ML 파이프라인 설계에 대한 기본기가 갖춰져 있습니다.', 'AI/ML 기초 면접'),
+(@i12, @s6b, 720000, '2026-01-21 14:00:00', '모델 서빙과 최적화에 대한 답변이 인상적이었습니다.', 'AI 모델 서빙 면접'),
+(@i13, @s7,  580000, '2026-01-24 09:00:00', 'MSA 아키텍처 경험이 풍부하고 트러블슈팅 능력이 좋습니다.', 'Backend MSA 면접');
 
 -- 사용자3 면접 4건
 SET @i14 = UUID(); SET @i15 = UUID(); SET @i16 = UUID(); SET @i17 = UUID();
 
 INSERT INTO interview (interview_id, setting_id, duration, created_at, ai_overall_review, interview_name) VALUES
-(@i14, @s8, 700000, '2026-01-15 14:00:00', 'CSS 레이아웃과 반응형 디자인에 대한 이해가 좋습니다.', 'Frontend CSS 면접'),
-(@i15, @s8, 640000, '2026-01-17 11:00:00', 'Next.js SSR/SSG 개념을 정확히 이해하고 있습니다.', 'Frontend Next.js 면접'),
-(@i16, @s9, 830000, '2026-01-22 10:00:00', 'Spring Security 설정 및 JWT 인증에 대한 이해가 깊습니다.', 'Backend 인증 면접'),
-(@i17, @s9, 760000, '2026-01-25 15:00:00', '동시성 제어와 락 전략에 대한 실무 경험이 돋보입니다.', 'Backend 동시성 면접');
+(@i14, @s8,  700000, '2026-01-15 14:00:00', 'CSS 레이아웃과 반응형 디자인에 대한 이해가 좋습니다.', 'Frontend CSS 면접'),
+(@i15, @s8b, 640000, '2026-01-17 11:00:00', 'Next.js SSR/SSG 개념을 정확히 이해하고 있습니다.', 'Frontend Next.js 면접'),
+(@i16, @s9,  830000, '2026-01-22 10:00:00', 'Spring Security 설정 및 JWT 인증에 대한 이해가 깊습니다.', 'Backend 인증 면접'),
+(@i17, @s9b, 760000, '2026-01-25 15:00:00', '동시성 제어와 락 전략에 대한 실무 경험이 돋보입니다.', 'Backend 동시성 면접');
 
 -- ================================================
 -- 면접 질문 (면접당 3~5개, question_id에 UUID 사용)
