@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
@@ -115,8 +117,8 @@ public class AuthController {
      * POST /api/auth/password/forgot
      */
     @PostMapping("/password/forgot")
-    public ResponseEntity<Void> forgotPassword(@RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<Map<String, Boolean>> forgotPassword(@RequestBody ResetPasswordRequest request) {
         authService.resetPassword(request.getEmail());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(Map.of("resetSent", true));
     }
 }

@@ -6,10 +6,10 @@ import com.boterview.interview_api.domain.user.entity.OAuthProvider;
 import com.boterview.interview_api.domain.user.entity.User;
 import com.boterview.interview_api.domain.user.repository.UserMapper;
 import com.boterview.interview_api.security.authentication.jwt.dto.JwtInformation;
+import com.boterview.interview_api.security.authentication.jwt.exception.InValidRefreshTokenException;
 import com.boterview.interview_api.security.authentication.jwt.provider.JwtTokenProvider;
 import com.boterview.interview_api.security.authentication.jwt.registry.JwtRegistry;
 import com.boterview.interview_api.security.core.dto.SecurityUserDto;
-import com.boterview.interview_api.security.core.exception.InValidAccessTokenException;
 import com.boterview.interview_api.security.core.principal.BotUserDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.ApplicationEventPublisher;
+import com.boterview.interview_api.security.event.PasswordResetEvent;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -51,6 +53,9 @@ class AuthServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private AuthService authService;
@@ -213,7 +218,7 @@ class AuthServiceTest {
 
         // When & Then
         assertThatThrownBy(() -> authService.refreshToken(invalidRefreshToken))
-                .isInstanceOf(InValidAccessTokenException.class);
+                .isInstanceOf(InValidRefreshTokenException.class);
 
         verify(tokenProvider).validateRefreshToken(invalidRefreshToken);
         verify(jwtRegistry, never()).rotateJwtInformation(anyString(), any());
@@ -229,7 +234,7 @@ class AuthServiceTest {
 
         // When & Then
         assertThatThrownBy(() -> authService.refreshToken(inactiveToken))
-                .isInstanceOf(InValidAccessTokenException.class);
+                .isInstanceOf(InValidRefreshTokenException.class);
 
         verify(jwtRegistry).hasActiveJwtInformationByRefreshToken(inactiveToken);
         verify(jwtRegistry, never()).rotateJwtInformation(anyString(), any());
@@ -293,6 +298,8 @@ class AuthServiceTest {
         verify(userMapper).findByEmail(testEmail);
         verify(passwordEncoder).encode(anyString());
         verify(userMapper).updatePassword(eq(testUser.getUserId()), eq("newEncodedPassword"));
+        verify(jwtRegistry).invalidateJwtInformationByUserId(testUser.getUserId());
+        verify(eventPublisher).publishEvent(any(PasswordResetEvent.class));
     }
 
     @Test
