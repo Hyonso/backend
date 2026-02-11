@@ -115,9 +115,9 @@ public class AuthController {
 
     /**
      * 비밀번호 재설정 API
-     * POST /api/auth/password/forgot
+     * POST /api/auth/forgot-password
      */
-    @PostMapping("/password/forgot")
+    @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, Boolean>> forgotPassword(@RequestBody ResetPasswordRequest request) {
         authService.resetPassword(request.getEmail());
         return ResponseEntity.ok(Map.of("resetSent", true));
