@@ -33,7 +33,7 @@ public class InterviewSettingService {
 	private final S3Service s3Service;
 
 	@Transactional
-	public void saveSettings(String userId, InterviewSettingRequestDto dto, MultipartFile resume) {
+	public String saveSettings(String userId, InterviewSettingRequestDto dto, MultipartFile resume) {
 		String settingId = UUID.randomUUID().toString();
 
 		String resumeUri = null;
@@ -73,6 +73,7 @@ public class InterviewSettingService {
 						.build());
 			}
 		}
+		return settingId;
 	}
 
 	private String resolveSkillId(String skillName) {
