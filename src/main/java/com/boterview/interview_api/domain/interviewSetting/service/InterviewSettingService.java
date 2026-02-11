@@ -3,6 +3,7 @@ package com.boterview.interview_api.domain.interviewSetting.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,13 +55,7 @@ public class InterviewSettingService {
 		interviewSettingMapper.insert(setting);
 
 		for (String skillName : dto.getSkills()) {
-			String skillId = skillMapper.findBySkill(skillName)
-					.map(Skill::getSkillId)
-					.orElseGet(() -> {
-						String newSkillId = UUID.randomUUID().toString();
-						skillMapper.insert(Skill.builder().skillId(newSkillId).skill(skillName).build());
-						return newSkillId;
-					});
+			String skillId = resolveSkillId(skillName);
 			settingSkillMapper.insert(SettingSkill.builder()
 					.settingId(settingId)
 					.skillId(skillId)
@@ -77,5 +72,21 @@ public class InterviewSettingService {
 						.build());
 			}
 		}
+	}
+
+	private String resolveSkillId(String skillName) {
+		return skillMapper.findBySkill(skillName)
+				.map(Skill::getSkillId)
+				.orElseGet(() -> {
+					String newSkillId = UUID.randomUUID().toString();
+					try {
+						skillMapper.insert(Skill.builder().skillId(newSkillId).skill(skillName).build());
+						return newSkillId;
+					} catch (DuplicateKeyException e) {
+						return skillMapper.findBySkill(skillName)
+								.map(Skill::getSkillId)
+								.orElseThrow(() -> e);
+					}
+				});
 	}
 }
