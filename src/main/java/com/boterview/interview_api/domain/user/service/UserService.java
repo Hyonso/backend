@@ -27,38 +27,29 @@ public class UserService {
         User user = userMapper.findById(userId)
                 .orElseThrow(() -> new BaseException(ErrorCode.USER_NOT_FOUND));
 
-        boolean nameChanged = false;
-        boolean passwordChanged = false;
+        boolean isChanged = false;
 
         // 이름 변경
         if (dto.getName() != null && !dto.getName().isBlank()) {
             user.updateName(dto.getName());
-            nameChanged = true;
+            isChanged = true;
         }
 
         // 비밀번호 변경 (OAuth 사용자는 변경 불가)
-        if (dto.getCurrentPassword() != null && dto.getNewPassword() != null) {
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             // OAuth 사용자 체크
             if (user.getOauth() != null) {
                 throw new BaseException(ErrorCode.AUTH_PASSWORD_ERROR);
             }
 
-            // 현재 비밀번호 확인
-            if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
-                throw new BaseException(ErrorCode.AUTH_CURRENT_PASSWORD_MISMATCH);
-            }
-
-            // 새 비밀번호로 변경
-            String encodedNewPassword = passwordEncoder.encode(dto.getNewPassword());
-            userMapper.updatePassword(userId, encodedNewPassword);
-            passwordChanged = true;
+            // 새 비밀번호로 변경 (객체 상태 업데이트)
+            String encodedNewPassword = passwordEncoder.encode(dto.getPassword());
+            user.updatePassword(encodedNewPassword);
+            isChanged = true;
         }
 
-        // 이름만 변경된 경우에만 update 호출 (비밀번호는 이미 updatePassword로 처리됨)
-        if (nameChanged && !passwordChanged) {
-            userMapper.update(user);
-        } else if (nameChanged && passwordChanged) {
-            // 둘 다 변경된 경우, 이름만 update (비밀번호는 이미 업데이트됨)
+        // 변경사항이 있으면 DB 업데이트
+        if (isChanged) {
             userMapper.update(user);
         }
 

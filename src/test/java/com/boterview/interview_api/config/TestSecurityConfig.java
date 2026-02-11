@@ -65,4 +65,9 @@ public class TestSecurityConfig {
 
         return new InMemoryClientRegistrationRepository(googleRegistration, kakaoRegistration);
     }
+
+    @Bean
+    public org.springframework.mail.javamail.JavaMailSender javaMailSender() {
+        return org.mockito.Mockito.mock(org.springframework.mail.javamail.JavaMailSender.class);
+    }
 }

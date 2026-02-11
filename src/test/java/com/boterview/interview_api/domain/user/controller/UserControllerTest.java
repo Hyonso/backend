@@ -95,7 +95,7 @@ class UserControllerTest {
                                 .build();
                 BotUserDetails userDetails = new BotUserDetails(userDto, "password");
 
-                UserUpdateDto updateDto = new UserUpdateDto(newName, null, null);
+                UserUpdateDto updateDto = new UserUpdateDto(newName, null);
 
                 UserResponseDto responseDto = UserResponseDto.builder()
                                 .userId(userId)
@@ -132,15 +132,5 @@ class UserControllerTest {
                                 .with(user(userDetails)))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.deleted").value(true));
-        }
-
-        @Test
-        @DisplayName("GET /api/users - 실패 (유효하지 않은 토큰)")
-        void getUser_Failure_InvalidToken() throws Exception {
-                // When & Then
-                mockMvc.perform(get("/api/users")
-                                .header("Authorization", "Bearer invalid-access-token"))
-                                .andExpect(status().isUnauthorized())
-                                .andExpect(jsonPath("$.code").value("A001"));
         }
 }

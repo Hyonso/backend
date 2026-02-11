@@ -30,8 +30,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(
             HttpServletRequest request,
             HttpServletResponse response,
-            Authentication authentication
-    ) throws IOException {
+            Authentication authentication) throws IOException {
 
         if (!(authentication.getPrincipal() instanceof BotUserDetails userDetails)) {
             throw new UnexpectedPrincipalException();
@@ -45,15 +44,18 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         Cookie refreshCookie = tokenProvider.generateRefreshTokenCookie(refreshToken);
         response.addCookie(refreshCookie);
-        response.sendRedirect(resolveRedirectUrl(request, "/"));
+        response.sendRedirect(resolveRedirectUrl(request, "/dashboard"));
     }
 
     private String resolveRedirectUrl(HttpServletRequest request, String path) {
         String proto = request.getHeader("X-Forwarded-Proto");
         String host = request.getHeader("X-Forwarded-Host");
-        if (proto == null) proto = request.getScheme();
-        if (host == null) host = request.getHeader("Host");
-        if (host == null) host = request.getServerName();
+        if (proto == null)
+            proto = request.getScheme();
+        if (host == null)
+            host = request.getHeader("Host");
+        if (host == null)
+            host = request.getServerName();
         return proto + "://" + host + path;
     }
 }
