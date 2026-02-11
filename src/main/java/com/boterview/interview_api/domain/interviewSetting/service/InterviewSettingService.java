@@ -54,9 +54,13 @@ public class InterviewSettingService {
 		interviewSettingMapper.insert(setting);
 
 		for (String skillName : dto.getSkills()) {
-			String skillId = UUID.randomUUID().toString();
-			Skill skill = Skill.builder().skillId(skillId).skill(skillName).build();
-			skillMapper.insert(skill);
+			String skillId = skillMapper.findBySkill(skillName)
+					.map(Skill::getSkillId)
+					.orElseGet(() -> {
+						String newSkillId = UUID.randomUUID().toString();
+						skillMapper.insert(Skill.builder().skillId(newSkillId).skill(skillName).build());
+						return newSkillId;
+					});
 			settingSkillMapper.insert(SettingSkill.builder()
 					.settingId(settingId)
 					.skillId(skillId)
