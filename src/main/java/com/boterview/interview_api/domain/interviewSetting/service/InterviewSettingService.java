@@ -1,6 +1,7 @@
 package com.boterview.interview_api.domain.interviewSetting.service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.dao.DuplicateKeyException;
@@ -75,18 +76,22 @@ public class InterviewSettingService {
 	}
 
 	private String resolveSkillId(String skillName) {
+		Optional<Skill> existing = skillMapper.findBySkill(skillName);
+		if (existing.isPresent()) {
+			return existing.get().getSkillId();
+		}
+
+		String newSkillId = UUID.randomUUID().toString();
+		try {
+			skillMapper.insert(Skill.builder().skillId(newSkillId).skill(skillName).build());
+		} catch (DuplicateKeyException e) {
+			return skillMapper.findBySkill(skillName)
+					.map(Skill::getSkillId)
+					.orElseThrow(() -> e);
+		}
+
 		return skillMapper.findBySkill(skillName)
 				.map(Skill::getSkillId)
-				.orElseGet(() -> {
-					String newSkillId = UUID.randomUUID().toString();
-					try {
-						skillMapper.insert(Skill.builder().skillId(newSkillId).skill(skillName).build());
-						return newSkillId;
-					} catch (DuplicateKeyException e) {
-						return skillMapper.findBySkill(skillName)
-								.map(Skill::getSkillId)
-								.orElseThrow(() -> e);
-					}
-				});
+				.orElse(newSkillId);
 	}
 }
