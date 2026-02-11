@@ -109,7 +109,7 @@ class InterviewSettingControllerTest {
     }
 
     @Test
-    @DisplayName("인증 없이 요청 -> 500 (NullPointerException)")
+    @DisplayName("인증 없이 요청 -> 401 Unauthorized")
     void saveSettings_noAuth() throws Exception {
         SecurityContextHolder.clearContext();
 
@@ -119,6 +119,6 @@ class InterviewSettingControllerTest {
         mockMvc.perform(multipart("/api/interview-settings")
                         .file(data))
                 .andDo(print())
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isUnauthorized());
     }
 }
