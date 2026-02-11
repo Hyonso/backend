@@ -95,7 +95,7 @@ class UserControllerTest {
                                 .build();
                 BotUserDetails userDetails = new BotUserDetails(userDto, "password");
 
-                UserUpdateDto updateDto = new UserUpdateDto(newName);
+                UserUpdateDto updateDto = new UserUpdateDto(newName, null, null);
 
                 UserResponseDto responseDto = UserResponseDto.builder()
                                 .userId(userId)

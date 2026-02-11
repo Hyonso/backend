@@ -12,16 +12,29 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
+      data-locations: # data.sql은 MySQL 변수를 사용하므로 H2에서는 비활성화
       encoding: UTF-8
 
   h2:
     console:
       enabled: true
 
-  # Redis 비활성화 (테스트에서는 불필요)
+  # Redis, Mail 비활성화 (테스트에서는 불필요)
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+
+# AWS S3 설정 (테스트용 더미 값)
+cloud:
+  aws:
+    credentials:
+      access-key: test-access-key
+      secret-key: test-secret-key
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: test-bucket
 
 mybatis:
   configuration:
@@ -45,6 +58,11 @@ logging:
   level:
     com.boterview.interview_api: DEBUG
     org.mybatis: DEBUG
+
+# AI 서버 설정
+ai:
+  server:
+    uri: "http://localhost:8000"
 
 # 초기화 설정
 init:

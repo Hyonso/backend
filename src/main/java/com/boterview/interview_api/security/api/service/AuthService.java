@@ -18,6 +18,8 @@ import com.boterview.interview_api.security.authentication.jwt.registry.JwtRegis
 import com.boterview.interview_api.security.core.principal.BotUserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.boterview.interview_api.security.authentication.jwt.exception.InValidRefreshTokenException;
+import com.boterview.interview_api.security.event.PasswordResetEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +33,7 @@ public class AuthService {
     private final UserDetailsService userDetailsService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     public JwtInformation login(String email, String password) {
         // 1. 사용자 조회
@@ -123,11 +126,22 @@ public class AuthService {
             throw new BaseException(ErrorCode.AUTH_PASSWORD_ERROR);
         }
 
-        String newPassword = UUID.randomUUID().toString().substring(0, 10);
-        String encodedPassword = passwordEncoder.encode(newPassword);
+        // 3. 랜덤 임시 비밀번호 생성 (10자리)
+        String temporaryPassword = UUID.randomUUID().toString().substring(0, 10);
+        String encodedPassword = passwordEncoder.encode(temporaryPassword);
+
+        // 4. DB에 임시 비밀번호 저장
         userMapper.updatePassword(user.getUserId(), encodedPassword);
 
-        // TODO: 이메일 발송 기능 추가 시 여기에 구현
-        log.info("임시 비밀번호가 생성되었습니다. email={}", email);
+        // 5. 기존 JWT 토큰 모두 무력화 (보안 강화)
+        jwtRegistry.invalidateJwtInformationByUserId(user.getUserId());
+
+        // 6. 이메일 발송 이벤트 발행 (비동기)
+        eventPublisher.publishEvent(new PasswordResetEvent(
+                email,
+                temporaryPassword,
+                LocalDateTime.now()));
+
+        log.info("임시 비밀번호 생성 및 이메일 발송 이벤트 발행. email={}, userId={}", email, user.getUserId());
     }
 }
