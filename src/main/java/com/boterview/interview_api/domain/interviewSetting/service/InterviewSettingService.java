@@ -19,6 +19,7 @@ import com.boterview.interview_api.domain.interviewSetting.repository.InterviewS
 import com.boterview.interview_api.domain.interviewSetting.repository.PreQuestionMapper;
 import com.boterview.interview_api.domain.interviewSetting.repository.SettingSkillMapper;
 import com.boterview.interview_api.domain.interviewSetting.repository.SkillMapper;
+import com.boterview.interview_api.stomp.registry.RoomRegistry;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ public class InterviewSettingService {
 	private final SettingSkillMapper settingSkillMapper;
 	private final SkillMapper skillMapper;
 	private final S3Service s3Service;
+	private final RoomRegistry roomRegistry;
 
 	@Transactional
 	public String saveSettings(String userId, InterviewSettingRequestDto dto, MultipartFile resume) {
@@ -73,6 +75,8 @@ public class InterviewSettingService {
 						.build());
 			}
 		}
+
+		roomRegistry.getOrCreateRoom(settingId);
 		return settingId;
 	}
 
