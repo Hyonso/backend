@@ -22,7 +22,8 @@ public class SecurityPaths {
     private static final String[] OTHER_PUBLIC = {
             "/error",
             "/actuator/**",
-            "/api/health"
+            "/api/health",
+            "/ws-native/**"
     };
 
     public static class MethodSpecific {
