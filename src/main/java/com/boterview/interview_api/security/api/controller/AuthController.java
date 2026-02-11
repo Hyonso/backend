@@ -3,6 +3,7 @@ package com.boterview.interview_api.security.api.controller;
 import com.boterview.interview_api.security.api.dto.*;
 import com.boterview.interview_api.security.api.service.AuthService;
 import com.boterview.interview_api.security.authentication.jwt.dto.JwtInformation;
+import com.boterview.interview_api.security.authentication.jwt.provider.JwtTokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     private static final int REFRESH_TOKEN_MAX_AGE = 7 * 24 * 60 * 60; // 7일
 
     /**
@@ -34,7 +34,7 @@ public class AuthController {
         JwtInformation jwtInfo = authService.login(request.getEmail(), request.getPassword());
 
         // RefreshToken을 HttpOnly 쿠키로 설정
-        Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, jwtInfo.getRefreshToken());
+        Cookie refreshTokenCookie = new Cookie(JwtTokenProvider.REFRESH_TOKEN_COOKIE_NAME, jwtInfo.getRefreshToken());
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true); // HTTPS에서만 전송
         refreshTokenCookie.setPath("/");
@@ -74,13 +74,14 @@ public class AuthController {
      */
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResponse> refresh(
-            @CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
+            @CookieValue(name = JwtTokenProvider.REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
             HttpServletResponse response) {
 
         JwtInformation newJwtInfo = authService.refreshToken(refreshToken);
 
         // 새 RefreshToken을 쿠키로 설정
-        Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, newJwtInfo.getRefreshToken());
+        Cookie refreshTokenCookie = new Cookie(JwtTokenProvider.REFRESH_TOKEN_COOKIE_NAME,
+                newJwtInfo.getRefreshToken());
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
         refreshTokenCookie.setPath("/");
@@ -96,13 +97,13 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
-            @CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
+            @CookieValue(name = JwtTokenProvider.REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
             HttpServletResponse response) {
 
         authService.logout(refreshToken);
 
         // RefreshToken 쿠키 삭제
-        Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, null);
+        Cookie cookie = new Cookie(JwtTokenProvider.REFRESH_TOKEN_COOKIE_NAME, null);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");

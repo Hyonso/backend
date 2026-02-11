@@ -28,7 +28,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@Profile({"dev", "prod"})
+@Profile({ "dev", "prod" })
 public class SecurityConfig {
 
         @Bean
@@ -62,6 +62,7 @@ public class SecurityConfig {
                                                 .accessDeniedHandler(jwtAccessDeniedHandler))
                                 .oauth2Login(login -> login
                                                 .authorizationEndpoint(endpoint -> endpoint
+                                                                .baseUri("/api/auth/oauth")
                                                                 .authorizationRequestRepository(
                                                                                 cookieAuthorizationRequestRepository))
                                                 .userInfoEndpoint(info -> info

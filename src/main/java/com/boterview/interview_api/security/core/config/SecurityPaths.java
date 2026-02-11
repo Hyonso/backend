@@ -36,8 +36,7 @@ public class SecurityPaths {
     public static final String[] PUBLIC_PATHS = combineArrays(
             API_DOCS,
             AUTH_ENDPOINTS,
-            OTHER_PUBLIC
-    );
+            OTHER_PUBLIC);
 
     public static boolean isPublicPath(String requestPath) {
         for (String pattern : PUBLIC_PATHS) {

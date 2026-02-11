@@ -31,6 +31,7 @@ public class DevSecurityConfig {
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .oauth2Login(login -> login
                                                 .authorizationEndpoint(endpoint -> endpoint
+                                                                .baseUri("/api/auth/oauth")
                                                                 .authorizationRequestRepository(
                                                                                 cookieAuthorizationRequestRepository))
                                                 .userInfoEndpoint(info -> info
