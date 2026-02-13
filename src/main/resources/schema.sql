@@ -95,7 +95,7 @@ CREATE TABLE interview_question (
                                      answer TEXT NULL,
                                      feedback TEXT NULL,
                                      created_at DATETIME NULL,
-                                     elapsed_time BIGINT NULL,
+                                     feedback TEXT NOT NULL,
                                      PRIMARY KEY (question_id),
                                      FOREIGN KEY (interview_id) REFERENCES interview (interview_id) ON DELETE CASCADE
 );
