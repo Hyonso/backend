@@ -93,7 +93,7 @@ CREATE TABLE interview_question (
                                      interview_id CHAR(36) NOT NULL,
                                      question TEXT NOT NULL,
                                      answer TEXT NULL,
-                                     feedback TEXT NULL,
+                                     sequence INTEGER NOT NULL,
                                      created_at DATETIME NULL,
                                      feedback TEXT NOT NULL,
                                      PRIMARY KEY (question_id),
