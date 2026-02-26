@@ -93,9 +93,10 @@ CREATE TABLE interview_question (
                                      interview_id CHAR(36) NOT NULL,
                                      question TEXT NOT NULL,
                                      answer TEXT NULL,
-                                     sequence INTEGER NOT NULL,
+                                     sequence INTEGER NOT NULL DEFAULT 0,
+                                     elapsed_time BIGINT NULL DEFAULT 0,
                                      created_at DATETIME NULL,
-                                     feedback TEXT NOT NULL,
+                                     feedback TEXT NOT NULL DEFAULT '',
                                      PRIMARY KEY (question_id),
                                      FOREIGN KEY (interview_id) REFERENCES interview (interview_id) ON DELETE CASCADE
 );
